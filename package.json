@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Visualize the rough paths signature of drawn paths",
   "main": "src/sketch.js",
+  "repository": "github:zhy0/signature-visualizer",
   "scripts": {
     "build": "webpack",
     "test": "mocha"
