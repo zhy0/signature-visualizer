@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta name="description" content="A small JavaScript app to visualize the rough path signature of a planar path">
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div class="content">
+      <h1>Rough Path Signature</h1>
+      <p>This tool will compute the signature of the path you draw below.</p>
+      <div id="canvasContainer"></div>
+      <div id="signature" class="pure-g"></div>
+      <div id="mouseData"> </div>
+      <canvas id="heatmap"></canvas>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.min.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
