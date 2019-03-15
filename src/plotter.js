@@ -20,25 +20,47 @@ function colorFunction(path) {
     return color;
 }
 
-function plotSig(data, level=3, container="signature") {
+
+function plotSig(data, level=5, container="signature") {
     // clear previous results
     var cont = document.getElementById(container);
     cont.innerHTML = '';
 
+    var grid_mobile = {
+        1: "pure-u-1-5",
+        2: "pure-u-2-5",
+        3: "pure-u-2-5",
+        4: "pure-u-1-2",
+        5: "pure-u-1-2",
+    }
+
+    var grid_desktop = {
+        1: "pure-u-lg-1-8",
+        2: "pure-u-lg-1-6",
+        3: "pure-u-lg-1-6",
+        4: "pure-u-lg-1-4",
+        5: "pure-u-lg-1-4",
+    }
+
     var S = sig.sig(data, level);
     for (var i = 1; i <= level; i++) {
-        var div = document.createElement('div');
-        div.classList.add("pure-u-1-" + (level));
-        div.id = "level" + i;
+        var outer = document.createElement('div');
+        var inner = document.createElement('div');
+
+        outer.id = "level" + i;
+        outer.classList.add(grid_mobile[i]);
+        outer.classList.add(grid_desktop[i]);
+        inner.classList.add("table-wrap");
         // add title
         var title = document.createElement('h3');
         title.appendChild(document.createTextNode('S'+i));
-        div.appendChild(title);
-        document.getElementById(container).append(div);
+        inner.appendChild(title);
+        outer.appendChild(inner);
+        document.getElementById(container).append(outer);
         // matrix dimensions
         var shape = [Math.pow(2, Math.ceil(i/2)),
                      Math.pow(2, Math.floor(i/2))];
-        drawTable(math.reshape(S[i], shape), div.id, colorFunction(data));
+        drawTable(math.reshape(S[i], shape), inner, colorFunction(data));
     }
 }
 
@@ -79,7 +101,7 @@ function drawTable(data, container, colorfn=function(x){return -x/20 + 0.5}) {
         tbody.appendChild(row);
     }
     table.appendChild(tbody);
-    document.getElementById(container).appendChild(table);
+    container.appendChild(table);
 }
 
 

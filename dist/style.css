@@ -1,17 +1,10 @@
 .content {
-    padding: 0 2em;
+    padding: 0 1em;
 }
 
-#signature > div {
-    margin-right: 1em;
-    margin-bottom: 1em;
+.table-wrap {
+    padding-right: 1em;
 }
-
-#level1 { width: 8%; }
-#level2 { width: 16%; }
-#level3 { width: 16%; }
-#level4 { width: 25%; }
-#level5 { width: 25%; }
 
 table {
     font-family: "Courier New", monospace;

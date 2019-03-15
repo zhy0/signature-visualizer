@@ -4,8 +4,8 @@ var sketch = function(p) {
     p.mouseData = [];
     p.renew = false;
     p.bgColor = 240;
-    p.xmax = 640;
-    p.ymax = 480;
+    p.xmax = Math.min(p.displayWidth-24, 600);
+    p.ymax = Math.min(p.displayHeight/2, 480);
 
     p.setup = function() {
         p.canvas = p.createCanvas(p.xmax, p.ymax);
@@ -13,8 +13,20 @@ var sketch = function(p) {
         p.reset();
     }
 
+    p.mouseDragged = function() {
+        // prevent scrolling
+        if (p.isInside()) {
+            return false;
+        }
+    }
+
+    p.isInside = function() {
+        return p.mouseX >= 0 && p.mouseX <= p.xmax &&
+               p.mouseY >= 0 && p.mouseY <= p.ymax;
+    }
+
     p.draw = function() {
-        if (p.mouseIsPressed) {
+        if (p.mouseIsPressed && p.isInside()) {
             if (p.renew) {
                 p.reset()
             }
