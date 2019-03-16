@@ -4,7 +4,7 @@ var sketch = function(p) {
     p.mouseData = [];
     p.renew = false;
     p.bgColor = 240;
-    p.xmax = Math.min(p.displayWidth-24, 600);
+    p.xmax = Math.min(p.displayWidth-64, 768);
     p.ymax = Math.min(p.displayHeight/2, 480);
 
     p.setup = function() {

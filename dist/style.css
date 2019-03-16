@@ -1,5 +1,10 @@
-.content {
+.main {
     padding: 0 1em;
+}
+
+.content {
+    max-width: 48em;
+    margin: auto;
 }
 
 .table-wrap {
@@ -23,6 +28,5 @@ td:after {
 }
 
 td .sig-entry {
-    text-align: center;
     position: absolute;
 }

@@ -6,6 +6,7 @@ const math = core.create();
 math.import(require('mathjs/lib/type/matrix'));
 math.import(require('mathjs/lib/function/matrix/reshape'));
 math.import(require('mathjs/lib/function/probability/factorial'));
+math.import(require('mathjs/lib/function/arithmetic/add'));
 
 function round(x, n=3) {
     var e = Math.pow(10, n);
@@ -86,10 +87,12 @@ function drawTable(data, container, colorfn=function(x){return -x/20 + 0.5}) {
             cell.style.color = fg;
 
             // add index of original tensor
-            cell.title = sig.reindex([i,j],
+            var index = math.add(1, sig.reindex(
+                [i,j],
                 [data.length, data[i].length],
-                new Array(level).fill(2, 0, level) // [2,2,...,2]
-            );
+                new Array(level).fill(2, 0, level) // [2,2,2,...]
+            ));
+            tippy(cell, {content: index, arrow: true});
 
             // add wrapping div to cell content
             var div = document.createElement('div');
