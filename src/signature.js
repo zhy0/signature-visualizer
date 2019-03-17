@@ -1,5 +1,6 @@
 const core = require('mathjs/core');
 const math = core.create();
+math.import(require('mathjs/lib/header'));
 math.import(require('mathjs/lib/type/matrix'));
 math.import(require('mathjs/lib/function/arithmetic/add'));
 math.import(require('mathjs/lib/function/arithmetic/subtract'));
@@ -17,9 +18,9 @@ math.import(require('mathjs/lib/function/statistics/prod'));
 /**
  * Compute the tensor product of two tensors.
  *
- * @param {ndarray} A
- * @param {ndarray} B
- * @returns {ndarray}
+ * @param {Array | number} A
+ * @param {Array | number} B
+ * @returns {Array | number}
  */
 function tensorProduct(A, B) {
     if (!Array.isArray(A)) {
@@ -30,6 +31,13 @@ function tensorProduct(A, B) {
     })
 }
 
+/**
+ * Compute the nth tensor power of a tensor.
+ *
+ * @param {Array | number} A - The tensor
+ * @param {number} n - The exponent
+ * @returns {Array | number}
+ */
 function tensorPow(A, n) {
     if (n == 0) {
         return 1;
@@ -38,6 +46,13 @@ function tensorPow(A, n) {
 }
 
 
+/**
+ * Convert flat (1D) index to index array, given a tensor shape.
+ *
+ * @param {number} m - A nonnegative integer
+ * @param {Array} shape - The shape of the target tensor
+ * @returns {Array} An array of same length as shape
+ */
 function intToIndex(m, shape) {
     var p = math.prod(shape);
     if (m >= p) {
@@ -50,6 +65,13 @@ function intToIndex(m, shape) {
     return math.flatten([intToIndex(Math.floor(m/n), shape.slice(0,-1)), m % n]);
 }
 
+/**
+ * Convert index array of a tensor to its flat index.
+ *
+ * @param {Array} index - Indices to convert
+ * @param {Array} shape - The shape of the tensor
+ * @returns {number} A nonnegative integer
+ */
 function indexToInt(index, shape) {
     if (index.length != shape.length) {
         throw new RangeError('Index must have same length as shape');
@@ -63,6 +85,14 @@ function indexToInt(index, shape) {
     return indexToInt(index.slice(0,-1), shape.slice(0,-1)) * n + i;
 }
 
+/**
+ * Convert index array of a tensor.
+ *
+ * @param {Array} index - Indices to convert
+ * @param {Array} shape1 - The shape of the input tensor
+ * @param {Array} shape2 - The shape of the target tensor
+ * @returns {Array} An index array representing the index of the target tensor
+ */
 function reindex(index, shape1, shape2) {
     if (index.length != shape1.length) {
         throw new RangeError('Dimensions do not match');
@@ -75,6 +105,12 @@ function reindex(index, shape1, shape2) {
     return intToIndex(indexToInt(index, shape1), shape2);
 }
 
+/**
+ * Compute the length of a piecewise linear path.
+ *
+ * @param {Array} X - A two-dimensional (N * d) array, a list of points
+ * @returns {number} The length of the path
+ */
 function pathLength(X) {
     var r = 0;
     var N = X.length;
@@ -85,14 +121,21 @@ function pathLength(X) {
     return r;
 }
 
+/**
+ * Compute the signature of a piecewise linear path.
+ *
+ * @param {Array} X - A two-dimensional (N * d) array, a list of points
+ * @param {number} n - The truncation level
+ * @returns {Array} An array of arrays of shape [1, d, d*d, d*d*d, ... ]
+ */
 function sig(X, n) {
     var shape = math.size(X);
     if (shape.length != 2) {
         throw new RangeError('Path must be an N by d matrix');
     }
 
-    var N = shape[0];
-    var d = shape[1];
+    var N = shape[0]; // number of points
+    var d = shape[1]; // dimension of path
     if (d <= 0) {
         throw new RangeError('Path must have positive dimension');
     }
@@ -111,7 +154,7 @@ function sig(X, n) {
         }
     }
 
-    // accumulate signature of path using chen's identity
+    // accumulate signature of path using Chen's identity
     var B = math.zeros([N-1, n + 1]);
     B[0] = A[0];
     for (var i = 1; i < N-1; i++) {
