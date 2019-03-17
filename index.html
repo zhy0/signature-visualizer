@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-min.css">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Rough Path Signature</title>
+    <meta name="description" content="A small JavaScript app to visualize the rough path signature of a planar path">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div class="main">
+      <div class="content">
+        <h1>Rough Path Signature</h1>
+        <p>
+          This app will compute the signature of the path you draw below.
+          <a href="https://github.com/zhy0/signature-visualizer">Source code</a>.
+        </p>
+        <div id="canvasContainer"></div>
+      </div>
+      <div id="signature" class="pure-g"></div>
+      <div class="content">
+          <h2>What am I seeing?</h2>
+          <p>
+            The truncated signature (5 levels) of the path you've drawn.
+            The signature is a method to summarize a path.
+            It is a collection of iterated integrals.
+            Here, we sample points of your mouse's movement
+            and linearly interpolate between the points to obtain a
+            continuous path and calculate its signature.
+          </p>
+          <p>
+            For instance, the values under <b>S1</b> represent the total displacement
+            (end point minus starting point) of the drawn path, while
+            <b>S2</b> contains information about
+            the area enclosed by the path.
+          </p>
+          <p>
+            The signature has two important properties:
+            <ul>
+                <li>it is independent of the parametrization of the path;</li>
+                <li>it is independent of starting point of the path.</li>
+            </ul>
+          </p>
+          <p>
+            The colors help with visualization by indicating whether a value
+            is negative (blue), neutral (yellow) or positve (red).
+          </p>
+          <h2>Why is this useful?</h2>
+          <p>
+            The signature is a powerful method to represent data. It
+            has nice properties that can be used for machine learning,
+            for instance in character recognition.
+            See the resources below.
+          </p>
+          <h2>Some more background</h2>
+          <p>
+            Mathematically, for a continuous path
+            $X \colon [0,1] \to \mathbb{R}^d$ of bounded variation,
+            the signature of $X$ is defined as
+            \[
+              S(X)_{0,1} = \left (1, \: S^1(X)_{0,1}, \: S^2(X)_{0,1}, \dots \right),
+            \]
+            where
+            \[
+              S^k(X)_{0,1} = \int_{0 < s_1 < \dots < s_k < 1} \, d X_{s_1} \otimes \dots \otimes d X_{s_k}.
+            \]
+            Here, the integral is taken to be the Stieltjes integral.
+            The signature is an element of the tensor algebra
+              $\bigoplus_{k=0}^\infty \left(\mathbb{R}^{d}\right)^{\otimes k} =
+              \mathbb{R} \oplus \mathbb{R^d} \oplus \left(\mathbb{R^d} \otimes \mathbb{R^d}\right) \oplus \dots$.
+          </p>
+          <p>
+            In coordinates, we have explicitly
+            \[
+              S(X)^{i_1,\dots,i_k}_{0,1} =
+              \int_{0 < s_1 < \dots < s_k < 1} \, d X_{s_1}^{i_1} \dots d X_{s_k}^{i_k},
+            \]
+            in which the indices $i_j$ take value in $\{1, \dots, d\}$.
+          </p>
+          <p>
+            In our case $d = 2$ and we truncate the signature at level 5.
+            The $k$th level is an element of a vector space of dimension
+            $d^k$, so the $k$th table above contains $2^k$ values.
+            You can hover over the cells to see the corresponding
+            indices.
+          </p>
+          <h2>Resources</h2>
+          <ul>
+            <li>
+              An excellent introductory talk on rough paths and signatures by the
+              founder, professor Terry Lyons:
+              <a href="https://youtu.be/q7P8srVENnQ">Rough Paths, Signatures and the modelling of functions on streams</a>. This tool is based on the one shown in the talk.
+            </li>
+            <li>
+              This <a href="https://github.com/kormilitzin/the-signature-method-in-machine-learning">Github repo</a>
+              is a nice and short getting-started guide for the signature method containing practical Python code.
+              There is also an overview of applications in machine learning.
+            </li>
+            <li>
+              For a very accessible introduction to signatures
+              (with overview of applications), see <a href="https://arxiv.org/pdf/1603.03788.pdf">A Primer on the Signature Method in Machine Learning</a>.
+            </li>
+            <li>
+              Python package for computing signatures: <a href="https://github.com/bottler/iisignature">iisignature</a>.
+              The author has also written a corresponding <a href="https://arxiv.org/abs/1802.08252">paper on the algorithms to compute signatures</a>.
+            </li>
+            <li>
+              A more comprehensive overview of the theory of signatures can be found
+              in the notes <a href="https://www.springer.com/la/book/9783540712848">Differential Equations Driven by Rough Paths</a>.
+            </li>
+            <li>
+              For an introduction to rough paths, see the book
+              <a href="http://www.hairer.org/notes/RoughPaths.pdf">A Course on Rough Paths</a>.
+            </li>
+            <li>
+              <a href="https://github.com/zhy0/signature-visualizer">Source code of this app</a>.
+            </li>
+          </ul>
+      </div>
+    </div>
+    <script>
+      renderMathInElement(
+          document.body,
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.min.js"></script>
+    <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@4"></script>
+    <script src="main.js"></script>
+  </body>
+</html>

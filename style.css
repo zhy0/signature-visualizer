@@ -1,0 +1,32 @@
+.main {
+    padding: 0 1em;
+}
+
+.content {
+    max-width: 48em;
+    margin: auto;
+}
+
+.table-wrap {
+    padding-right: 1em;
+}
+
+table {
+    font-family: "Courier New", monospace;
+    width: 100%;
+    border-spacing: 0;
+}
+
+td {
+  position: relative;
+}
+
+td:after {
+    content: '';
+    display: block;
+    margin-top: 100%;
+}
+
+td .sig-entry {
+    position: absolute;
+}
