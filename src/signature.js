@@ -9,6 +9,7 @@ math.import(require('mathjs/lib/function/arithmetic/norm'));
 math.import(require('mathjs/lib/function/matrix/size'));
 math.import(require('mathjs/lib/function/matrix/zeros'));
 math.import(require('mathjs/lib/function/matrix/map'));
+math.import(require('mathjs/lib/function/matrix/flatten'));
 math.import(require('mathjs/lib/function/probability/factorial'));
 math.import(require('mathjs/lib/function/statistics/prod'));
 
@@ -46,7 +47,7 @@ function intToIndex(m, shape) {
         return m;
     }
     var n = shape[shape.length - 1];
-    return [intToIndex(Math.floor(m/n), shape.slice(0,-1)), m % n].flat();
+    return math.flatten([intToIndex(Math.floor(m/n), shape.slice(0,-1)), m % n]);
 }
 
 function indexToInt(index, shape) {
